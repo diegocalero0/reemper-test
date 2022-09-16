@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:reemper/screens/modalities/modalities_screen.dart';
+import 'package:reemper/servicelocator/locator.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  setupLocator();
   runApp(const MyApp());
 }
 
@@ -17,6 +20,11 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         primaryColor: const Color(0xff5CBEF8),
         textTheme: const TextTheme(
+          headline1: TextStyle(
+            fontSize: 29,
+            color: Color(0xff5CBEF8),
+            fontWeight: FontWeight.bold
+          ),
           headline2: TextStyle(
             fontSize: 26,
             color: Color(0xff1A1E22),

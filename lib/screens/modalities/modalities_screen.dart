@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:reemper/constants/assets_constants.dart';
+import 'package:reemper/models/modality_model.dart';
 import 'package:reemper/screens/configure/configure_screen.dart';
 import 'package:reemper/screens/modalities/modalities_presenter.dart';
+import 'package:reemper/servicelocator/locator.dart';
 
 import 'package:reemper/widgets/custom_app_bar_widget.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -17,9 +19,10 @@ class ModalitiesScreen extends StatefulWidget {
 
 class _ModalitiesScreenState extends ModalitiesScreenDelegate<ModalitiesScreen> {
 
-  final ModalitiesPresenter presenter = ModalitiesPresenter();
+  final ModalitiesPresenter presenter = locator.get<ModalitiesPresenter>();
 
   int currentStep = 1;
+  bool isScreenActive = true;
 
   List<String> stepsAssets = [
     kIcDescription,
@@ -32,6 +35,7 @@ class _ModalitiesScreenState extends ModalitiesScreenDelegate<ModalitiesScreen> 
   @override
   void initState() {
     presenter.mView = this;
+    presenter.initModalities();
     super.initState();
   }
 
@@ -78,24 +82,23 @@ class _ModalitiesScreenState extends ModalitiesScreenDelegate<ModalitiesScreen> 
   Widget _createModalities() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        _createModality(kIcCar, navigateToSkillsScreen),
-        _createModality(kIcMeeting, navigateToSkillsScreen),
-        _createModality(kIcResident, navigateToSkillsScreen),
-        _createModality(kIcCameraMovie, navigateToSkillsScreen)
-      ],
+      children: presenter.modalities.map((ModalityModel modality) {
+        return _createModality(modality);
+      }).toList()
     );
   }
 
-  Widget _createModality(String asset, VoidCallback action) {
+  Widget _createModality(ModalityModel modality) {
     return GestureDetector(
-      onTap: action,
+      onTap: () {
+        presenter.selectModality = modality;
+      },
       child: ClipOval(    
         child: Container(
           width: 70,
           height: 70,
           color: const Color(0x801a1E22),
-          child: Image.asset(asset),
+          child: Image.asset(modality.asset),
         ),
       ),
     );
@@ -181,6 +184,19 @@ class _ModalitiesScreenState extends ModalitiesScreenDelegate<ModalitiesScreen> 
 
   @override
   void navigateToSkillsScreen() {
-    navigatePush(const ConfigureScreen(key: Key("ConfigureScreen")));
+    if(isScreenActive) {
+      setState(() {
+        isScreenActive = false;
+      });
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (BuildContext context) {
+          return const ConfigureScreen(key: Key("ConfigureScreen"));
+        })
+      ).then((value) {
+        setState(() {
+          isScreenActive = true;
+        });
+      });
+    }
   }
 }
