@@ -1,6 +1,6 @@
 # reemper
 
-A new Flutter project.
+App for Reemper (This application is only a test)
 
 ## Getting Started
 
