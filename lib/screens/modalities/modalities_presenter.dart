@@ -12,11 +12,9 @@ class ModalitiesPresenter {
 
   final GetModalitiesUseCase _getModalitiesUseCase;
 
-
   ModalitiesPresenter({
     GetModalitiesUseCase? getModalitiesUseCase
-  }):
-    _getModalitiesUseCase = getModalitiesUseCase ?? locator.get();
+  }): _getModalitiesUseCase = getModalitiesUseCase ?? locator.get();
 
   List<ModalityModel> modalities = [];
   ModalityModel? _selectedModality;
