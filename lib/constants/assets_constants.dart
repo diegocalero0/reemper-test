@@ -8,3 +8,7 @@ const String kIcCar = "assets/png/ic_car.png";
 const String kIcMeeting = "assets/png/ic_meeting.png";
 const String kIcResident = "assets/png/ic_resident.png";
 const String kIcCameraMovie = "assets/png/ic_resident.png";
+
+const String kIcLogo = "assets/png/ic_logo.png";
+
+const String kIcInformation = "assets/png/ic_information.png";
