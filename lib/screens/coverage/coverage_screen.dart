@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:reemper/base/base_state.dart';
 import 'package:reemper/constants/assets_constants.dart';
 import 'package:reemper/constants/string_constants.dart';
 import 'package:reemper/models/modality_model.dart';
@@ -10,7 +9,9 @@ import 'package:reemper/servicelocator/locator.dart';
 import 'package:reemper/widgets/custom_app_bar_widget.dart';
 import 'package:reemper/widgets/custom_main_button.dart';
 import 'package:reemper/widgets/modality_item.dart';
+import 'package:slider_button/slider_button.dart';
 
+/// Screen where the user can see the coverage of the modalities
 class CoverageScreen extends StatefulWidget {
 
     const CoverageScreen({Key? key}) : super(key: key);
@@ -20,7 +21,7 @@ class CoverageScreen extends StatefulWidget {
 
 }
 
-class _CoverageScreenState extends CoverageScreenDelegate<CoverageScreen> with TickerProviderStateMixin {
+class _CoverageScreenState extends BaseState<CoverageScreen> with TickerProviderStateMixin {
 
   late final AnimationController _controller;
   late final AnimationController _controllerStart;
@@ -84,14 +85,19 @@ class _CoverageScreenState extends CoverageScreenDelegate<CoverageScreen> with T
                     top: 0,
                     bottom: 0,
                   ),
-                  AnimatedBuilder(
-                    animation: _controllerStart,
-                    builder: (BuildContext context, child) {
-                      return Transform.translate(
-                        offset: Offset(0, 50 - (_controllerStart.value * 50)),
-                        child: _createLogo(),
-                      );
-                    }
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: AnimatedBuilder(
+                      animation: _controllerStart,
+                      builder: (BuildContext context, child) {
+                        return Transform.translate(
+                          offset: Offset(0, 50 - (_controllerStart.value * 50)),
+                          child: _createLogo(),
+                        );
+                      }
+                    ),
                   )
                 ],
               ),
@@ -102,6 +108,7 @@ class _CoverageScreenState extends CoverageScreenDelegate<CoverageScreen> with T
     );
   }
 
+  /// Method that creates the shadow for the logo animation
   Widget _createShadow() {
     return Container(
       width: 40,
@@ -118,6 +125,7 @@ class _CoverageScreenState extends CoverageScreenDelegate<CoverageScreen> with T
     );
   }
 
+  /// Method that creates the logo of the app
   Widget _createLogo() {
     return SizedBox(
       width: double.infinity,
@@ -158,6 +166,7 @@ class _CoverageScreenState extends CoverageScreenDelegate<CoverageScreen> with T
     );
   }
   
+  /// Method that render the modalities top container
   Widget _createItems() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -195,6 +204,8 @@ class _CoverageScreenState extends CoverageScreenDelegate<CoverageScreen> with T
     );
   }
 
+  /// Method that creates the content of the screen
+  /// The content must be change when a modality is selected
   Widget _createContent() {
 
     Widget child;
@@ -216,11 +227,11 @@ class _CoverageScreenState extends CoverageScreenDelegate<CoverageScreen> with T
     } else if(presenter.getSelectedModality?.name == kModalityNameTogo) {
       child = _createContentTogo();
     } else if(presenter.getSelectedModality?.name == kModalityNameMeeting) {
-      child = Text("Goa");
+      child = _createContentMeeting();
     } else if(presenter.getSelectedModality?.name == kModalityNameResident) {
-      child = Text("Goa");
+      child = _createContentResident();
     } else if(presenter.getSelectedModality?.name == kModalityNameVideoconsulta) {
-      child = Text("Goa");
+      child = _createContentVideoConsulta();
     } else {
       child = const SizedBox();
     }
@@ -245,24 +256,158 @@ class _CoverageScreenState extends CoverageScreenDelegate<CoverageScreen> with T
       );
   }
 
-  Widget _createContentTogo() {
+  /// Create the content for the modality VideoConsulta
+  Widget _createContentVideoConsulta() {
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-        _createTogoIconAndStateText(),
-        CustomMainButton(
-          mainText: "Agregar consultorios/oficinas",
-          onPressed: () {},
-          height: 44,
-          borderRadius: 22,
-          leftIconAsset: Icon(Icons.add_circle_rounded, color: Theme.of(context).primaryColor),
+        Column(
+          children: <Widget>[
+            Text(
+              "Estado",
+              style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                color: Colors.white.withOpacity(0.7),
+                fontWeight: FontWeight.w200
+              )
+            ),
+            const SizedBox(height: 4),
+            Text(
+              presenter.isConferenceEnabled ? "Disponible" : "No disponible",
+              style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                color: Colors.white,
+                fontSize: 18
+              )
+            ),
+          ],
+        ),
+        _conferenceSlideOrStatus(),
+        Text(
+          "Desliza hacía la derecha para habilitar las videoconsultas.",
+          style: Theme.of(context).textTheme.bodyText1?.copyWith(
+            color: Colors.white.withOpacity(0.6),
+            fontWeight: FontWeight.w200
+          )
         )
       ],
     );
   }
 
-  Widget _createTogoIconAndStateText() {
+  /// Create the slider for enable or disable the modality VideoConsulta
+  Widget _conferenceSlideOrStatus() {
+    if(presenter.isConferenceEnabled) {
+      return Text(
+        "Ahora podrás realizar tus encuentros a través de video llamadas.",
+        style: Theme.of(context).textTheme.bodyText1?.copyWith(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.w200
+        ),
+        textAlign: TextAlign.center,
+      );
+    } else {
+      return SliderButton(
+        height: 75,
+        backgroundColor: const Color(0xff1A1E22),
+        action: () {
+          presenter.changeConferenceStatus = !presenter.isConferenceEnabled;
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xff1A1E22),
+            borderRadius: BorderRadius.circular(38),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x65000000),
+                offset: Offset(3, 0),
+                blurRadius: 6
+              )
+            ]
+          ),
+          width: 121,
+          padding: const EdgeInsets.symmetric(vertical: 24),
+          child: Image.asset(kIcCameraMovie, color: Colors.white, width: 60),
+        )
+      );
+    }
+  }
+
+  /// Create the content for the modality Meeting
+  Widget _createContentMeeting() {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Image.asset(kIcWarning, color: const Color(0x40FFFFFF)),
+        const SizedBox(height: 30),
+        RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            text: 'Tenemos temporalmente ',
+            style: Theme.of(context).textTheme.bodyText1?.copyWith(
+              fontSize: 14,
+              color: Colors.white.withOpacity(0.3),
+              fontWeight: FontWeight.w400
+            ),
+            children: <TextSpan>[
+              TextSpan(text: "deshabilitado ", style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.white.withOpacity(0.3),
+                fontSize: 14,
+              )),
+              const TextSpan(text: 'esta modalidad para su configuración.')
+            ],
+          ),
+        ),
+        const SizedBox(height: 80)
+      ],
+    );
+  }
+
+  /// Create the content for the modality Resident
+  Widget _createContentResident() {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        _createNotZonesFoundState(),
+        SizedBox(
+          width: 323,
+          child: CustomMainButton(
+            mainText: "Agregar consultorios/oficinas",
+            onPressed: () {},
+            height: 44,
+            borderRadius: 22,
+            leftIconAsset: Icon(Icons.add_circle_rounded, color: Theme.of(context).primaryColor),
+          )
+        )
+      ],
+    );
+  }
+
+  /// Create the content for the modality Togo
+  Widget _createContentTogo() {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        _createNotZonesFoundState(),
+        SizedBox(
+          width: 232,
+          child: CustomMainButton(
+            mainText: "Agregar zonas",
+            onPressed: () {},
+            height: 44,
+            borderRadius: 22,
+            leftIconAsset: Icon(Icons.add_circle_rounded, color: Theme.of(context).primaryColor),
+          ),
+        )
+      ],
+    );
+  }
+
+  /// Create the content for the state not enabled for zones
+  Widget _createNotZonesFoundState() {
     return Column(
       children: <Widget>[
         Icon(Icons.settings, color: Colors.white.withOpacity(0.4), size: 52),
@@ -290,6 +435,7 @@ class _CoverageScreenState extends CoverageScreenDelegate<CoverageScreen> with T
     );
   }
 
+  /// Create the information of a modality
   Widget _createModalityInformation() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -327,6 +473,7 @@ class _CoverageScreenState extends CoverageScreenDelegate<CoverageScreen> with T
     );
   }
 
+  /// Create the content when no modality was selected
   Widget _createContentNotSelectedItem() {
     return Column(
       mainAxisSize: MainAxisSize.min,

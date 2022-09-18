@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// Widget that represents the reusable main button
+/// for the app
 class CustomMainButton extends StatelessWidget {
 
   final String mainText;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reemper/constants/assets_constants.dart';
 import 'package:reemper/models/modality_model.dart';
 
 enum ModalityItemSelectedType {
@@ -6,6 +7,7 @@ enum ModalityItemSelectedType {
   light
 }
 
+/// Widget that represent the modality item for configuration
 class ModalityItem extends StatelessWidget {
   final ModalityModel modality;
   final VoidCallback onClick;
@@ -58,7 +60,22 @@ class ModalityItem extends StatelessWidget {
               ),
               Positioned.fill(
                 child: Align(
-                  child:  Image.asset(modality.asset, color: Colors.white.withOpacity(0.7)),
+                  child:  Container(
+                    width: size,
+                    height: size,
+                    padding: const EdgeInsets.all(20),
+                    child: Image.asset(modality.asset, color: Colors.white.withOpacity(0.7)),
+                  ),
+                ),
+              ),
+              if(!enabled)
+              Positioned(
+                bottom: 16,
+                right: 16,
+                child: SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: Image.asset(kIcWarning, color: const Color(0xffCCCCCC)),
                 ),
               )
             ],
@@ -68,11 +85,12 @@ class ModalityItem extends StatelessWidget {
     );
   }
 
+  /// Method that creates the shadow for the item
   List<BoxShadow> _createShadowNotSelected() {
     return [
       if(selected && modality.selectedType == ModalityItemSelectedType.shadow)
       const BoxShadow(
-        color: Color(0x60ff5CBEF8),
+        color: Color(0xff5CBEF8),
         blurRadius: 12
       ),
       const BoxShadow(

@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:reemper/constants/assets_constants.dart';
 import 'package:reemper/models/modality_model.dart';
 import 'package:reemper/screens/configure/configure_presenter.dart';
 import 'package:reemper/screens/coverage/coverage_screen.dart';
@@ -11,6 +8,7 @@ import 'package:reemper/widgets/custom_app_bar_widget.dart';
 import 'package:reemper/widgets/custom_main_button.dart';
 import 'package:reemper/widgets/modality_item.dart';
 
+/// Screen where the user can choose what modality configure
 class ConfigureScreen extends StatefulWidget {
 
     const ConfigureScreen({Key? key}) : super(key: key);
@@ -32,12 +30,14 @@ class _ConfigureScreenState extends ConfigureScreenDelegate<ConfigureScreen>  wi
   double distanceX = 0;
   double distanceY = 0;
   double multiplier = 1;
+  double endX = 0;
+  double endY = 0;
 
   @override
   void initState() {
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
     );
 
     _controller.addStatusListener((status) {
@@ -84,6 +84,7 @@ class _ConfigureScreenState extends ConfigureScreenDelegate<ConfigureScreen>  wi
     );
   }
 
+  /// Method that creates the main content of the screen
   Widget _createBody() {
     return SafeArea(
       child: Column(
@@ -103,6 +104,7 @@ class _ConfigureScreenState extends ConfigureScreenDelegate<ConfigureScreen>  wi
     );
   }
 
+  /// Method that creates the main button
   Widget _createMainButton() {
     return Padding(
       child: CustomMainButton(
@@ -113,6 +115,7 @@ class _ConfigureScreenState extends ConfigureScreenDelegate<ConfigureScreen>  wi
     );
   }
 
+  /// Method that creates the title of the screen
   Widget _createMainMessage() {
     return RichText(
       text: TextSpan(
@@ -128,6 +131,7 @@ class _ConfigureScreenState extends ConfigureScreenDelegate<ConfigureScreen>  wi
     );
   }
 
+  /// Method that creates a description of the screen
   Widget _createSecondaryMessage() {
     return Text(
       "Te ofrecemos mayor alternativas para ofrecer tus servicios profesionales y expandir la cobertura de ellos.",
@@ -139,9 +143,7 @@ class _ConfigureScreenState extends ConfigureScreenDelegate<ConfigureScreen>  wi
     );
   }
 
-  double endX = 0;
-  double endY = 0;
-
+  /// Method that creates the modalities on the screen
   Widget _createItems() {
     final List<ModalityModel> modalities = modalitiesPresenter.getOrderedModalities();
 
@@ -251,6 +253,7 @@ class _ConfigureScreenState extends ConfigureScreenDelegate<ConfigureScreen>  wi
     );
   }
 
+  /// Method that creates a modality on the screen
   Widget _createItem(ModalityModel modality) {
     return ModalityItem(modality: modality, onClick: () {
         modalitiesPresenter.selectModality = modality;
@@ -258,6 +261,7 @@ class _ConfigureScreenState extends ConfigureScreenDelegate<ConfigureScreen>  wi
       });
   }
 
+  /// Method that create the item selected container
   Widget _createItemSelected(bool invisible) {
     if(invisible) {
       return Container(
@@ -291,6 +295,7 @@ class _ConfigureScreenState extends ConfigureScreenDelegate<ConfigureScreen>  wi
       );
   }
 
+  /// Method that creates the name of the modality selected
   Widget _createSelectedItemText() {
     return Center(
       child: Text(
@@ -302,6 +307,7 @@ class _ConfigureScreenState extends ConfigureScreenDelegate<ConfigureScreen>  wi
     );
   }
 
+  /// Method that creates the description of the modality
   Widget _createSelectedItemDescription() {
     return Center(
       child: Text(
@@ -320,5 +326,4 @@ class _ConfigureScreenState extends ConfigureScreenDelegate<ConfigureScreen>  wi
   void navigateToCoverageScreen() {
     navigatePush(const CoverageScreen(key: Key("CoverageScreen")));
   }
-
 }

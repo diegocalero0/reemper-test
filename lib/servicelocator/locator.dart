@@ -4,6 +4,8 @@ import 'package:reemper/usecases/get_modalities_use_case.dart';
 
 final locator = GetIt.instance;
 
+/// Method that initialize the service locator
+/// for dependency injection
 void setupLocator() {
 
   /// Use cases

@@ -1,3 +1,5 @@
+/// Cosntants that represent the generic strings for the app
+
 const String kModalityNameTogo = "To go";
 const String kModalityDescriptionTogo = "Lleva tu servicio hasta donde tu usuario.";
 const String kModalityNameMeeting = "Meeting";

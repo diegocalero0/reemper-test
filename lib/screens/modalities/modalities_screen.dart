@@ -29,7 +29,7 @@ class _ModalitiesScreenState extends ModalitiesScreenDelegate<ModalitiesScreen> 
     kIcPerson,
     kIcMovie,
     kIcWork,
-    kIcPayment
+    kIcVideocam
   ];
 
   @override
@@ -97,8 +97,9 @@ class _ModalitiesScreenState extends ModalitiesScreenDelegate<ModalitiesScreen> 
         child: Container(
           width: 70,
           height: 70,
+          padding: const EdgeInsets.all(15),
           color: const Color(0x801a1E22),
-          child: Image.asset(modality.asset),
+          child: Image.asset(modality.asset, fit: BoxFit.contain),
         ),
       ),
     );
@@ -141,6 +142,7 @@ class _ModalitiesScreenState extends ModalitiesScreenDelegate<ModalitiesScreen> 
         Opacity(
           child: ClipOval(
             child: Container(
+              padding: const EdgeInsets.all(8),
               color: index < currentStep ? Theme.of(context).primaryColor : Theme.of(context).primaryColor,
               child: Image.asset(stepAsset),
               height: 35,

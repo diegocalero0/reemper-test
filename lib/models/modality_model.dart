@@ -1,5 +1,6 @@
 import 'package:reemper/widgets/modality_item.dart';
 
+/// Model that represent a modality
 class ModalityModel {
   final String name;
   final String description;

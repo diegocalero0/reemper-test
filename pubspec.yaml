@@ -32,6 +32,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   step_progress_indicator: ^1.0.2
   get_it: ^7.2.0
+  slider_button: ^2.0.0
+  sliding_switch: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -43,6 +45,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+  mockito: ^5.2.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
