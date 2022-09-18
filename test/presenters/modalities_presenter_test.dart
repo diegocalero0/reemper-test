@@ -28,8 +28,6 @@ main() {
       _modalitiesPresenter.selectModality = modalities[index];
       final List<ModalityModel> orderedModalities = _modalitiesPresenter.getOrderedModalities();
 
-
-
       assert(orderedModalities[0] == modalities[(index + modalities.length - 2) % modalities.length]);
       assert(orderedModalities[1] == modalities[(index + modalities.length - 1) % modalities.length]);
       assert(orderedModalities[2] == modalities[index]);
